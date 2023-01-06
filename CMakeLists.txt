@@ -1,7 +1,22 @@
-cmake_minimum_required(VERSION 3.0)
-project(my_raylib_game CXX)
+cmake_minimum_required(VERSION 3.1.0)
+project(Pong 
+		VERSION 1.0.0
+		DESCRIPTION "Pong clone"
+		LANGUAGES CXX
+)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+#if (MSVC)
+#  set(CMAKE_CXX_FLAGS "/EHsc /std:c++17")
+#  set(CMAKE_CXX_FLAGS_DEBUG "/Od")
+#  set(CMAKE_CXX_FLAGS_RELEASE "/O2")
+#else ()
+#  set(CMAKE_CXX_FLAGS "-std=c++17")
+#  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+#  set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+#endif ()
 
 # Adding Raylib
 include(FetchContent)
