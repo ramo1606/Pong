@@ -6,6 +6,10 @@
 
 using namespace Common;
 
+//TODO: make resourcesmanager and game a real singleton
+//TODO: get rid of magic numbers
+//TODO: comment code
+
 enum class State : uint8_t 
 {
     MENU,
@@ -23,12 +27,12 @@ public:
     void update()
     {
         bool space_pressed = false;
-        if (IsKeyDown(KEY_SPACE) && !m_SpaceDown)
+        if ((IsKeyDown(KEY_SPACE) || IsGamepadButtonDown(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)) && !m_SpaceDown)
         {
             space_pressed = true;
         }
 
-        m_SpaceDown = IsKeyDown(KEY_SPACE);
+        m_SpaceDown = IsKeyDown(KEY_SPACE) || IsGamepadButtonDown(0, GAMEPAD_BUTTON_MIDDLE_RIGHT);
 
         switch (m_State)
         {
@@ -40,13 +44,13 @@ public:
             }
             else
             {
-                if (m_NumPlayers == 1 && IsKeyDown(KEY_DOWN))
+                if (m_NumPlayers == 1 && (IsKeyDown(KEY_DOWN) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) == 1))
                 {
                     //Play sound
                     m_Game.playSound(EPONG_SOUNDS::DOWN, true);
                     m_NumPlayers = 2;
                 }
-                else if (m_NumPlayers == 2 && IsKeyDown(KEY_UP))
+                else if (m_NumPlayers == 2 && (IsKeyDown(KEY_UP) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) == -1))
                 {
                     //Play sound
                     m_Game.playSound(EPONG_SOUNDS::UP, true);

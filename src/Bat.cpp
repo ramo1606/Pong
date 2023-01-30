@@ -29,15 +29,15 @@ void Bat::processInput()
 	switch (m_Player)
 	{
 	case Player::Player1:
-		if (IsKeyDown(KEY_Z) || IsKeyDown(KEY_DOWN))
+		if (IsKeyDown(KEY_Z) || IsKeyDown(KEY_DOWN) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) == 1)
 			m_Dy = PLAYER_SPEED;
-		else if (IsKeyDown(KEY_A) || IsKeyDown(KEY_UP))
+		else if (IsKeyDown(KEY_A) || IsKeyDown(KEY_UP) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) == -1)
 			m_Dy = -PLAYER_SPEED;
 		break;
 	case Player::Player2:
-		if (IsKeyDown(KEY_M))
+		if (IsKeyDown(KEY_M) || GetGamepadAxisMovement(1, GAMEPAD_AXIS_LEFT_Y) == 1)
 			m_Dy = PLAYER_SPEED;
-		else if (IsKeyDown(KEY_K))
+		else if (IsKeyDown(KEY_K) || GetGamepadAxisMovement(1, GAMEPAD_AXIS_LEFT_Y) == -1)
 			m_Dy = -PLAYER_SPEED;
 		break;
 	default:
