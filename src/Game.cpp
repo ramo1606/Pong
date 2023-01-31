@@ -6,9 +6,22 @@
 
 using namespace Common;
 
+std::shared_ptr<Game> Game::m_Instance = nullptr;
+
 Game::Game(int players)
 {
 	createPlayers(players);
+}
+
+Game::~Game()
+{
+}
+
+std::shared_ptr<Game> Game::getInstance()
+{
+	if (!m_Instance)
+		m_Instance.reset(new Game(0));
+	return m_Instance;
 }
 
 void Game::update()

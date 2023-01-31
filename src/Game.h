@@ -9,7 +9,11 @@
 class Game 
 {
 public:
-	Game(int players);
+	~Game();
+	Game(const Game&) = delete;
+	Game& operator=(const Game&) = delete;
+
+	static std::shared_ptr<Game> getInstance();
 
 	void update();
 	void draw();
@@ -26,6 +30,9 @@ public:
 	void setAIOffset(float value) { m_AI_Offset = value; }
 
 private:
+	Game(int players);
+	static std::shared_ptr<Game> m_Instance;
+
 	void createPlayers(int players);
 	std::vector<std::unique_ptr<Impact>> m_Impacts;
 	std::vector<std::unique_ptr<Bat>> m_Bats;

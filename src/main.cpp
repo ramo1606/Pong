@@ -40,34 +40,34 @@ public:
             if (space_pressed)
             {
                 m_State = State::PLAY;
-                m_Game.reset(m_NumPlayers);
+                Game::getInstance()->reset(m_NumPlayers);
             }
             else
             {
                 if (m_NumPlayers == 1 && (IsKeyDown(KEY_DOWN) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) == 1))
                 {
                     //Play sound
-                    m_Game.playSound(std::string("down"), 1, true);
+                    Game::getInstance()->playSound(std::string("down"), 1, true);
                     m_NumPlayers = 2;
                 }
                 else if (m_NumPlayers == 2 && (IsKeyDown(KEY_UP) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) == -1))
                 {
                     //Play sound
-                    m_Game.playSound(std::string("up"), 1, true);
+                    Game::getInstance()->playSound(std::string("up"), 1, true);
                     m_NumPlayers = 1;
                 }
-                m_Game.update();
+                Game::getInstance()->update();
             }
             break;
         case State::PLAY:
             //Has anyone won?
-            if (std::max(m_Game.getBats()[0]->getScore(), m_Game.getBats()[1]->getScore()) > 9)
+            if (std::max(Game::getInstance()->getBats()[0]->getScore(), Game::getInstance()->getBats()[1]->getScore()) > 9)
             {
                 m_State = State::GAME_OVER;
             }
             else
             {
-                m_Game.update();
+                Game::getInstance()->update();
             }
             break;
         case State::GAME_OVER:
@@ -77,7 +77,7 @@ public:
                 m_State = State::MENU;
                 m_NumPlayers = 0;
 
-                m_Game.reset(m_NumPlayers);
+                Game::getInstance()->reset(m_NumPlayers);
                 m_NumPlayers = 1;
             }
             break;
@@ -91,7 +91,7 @@ public:
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        m_Game.draw();
+        Game::getInstance()->draw();
 
         switch (m_State)
         {
@@ -117,7 +117,6 @@ private:
     bool m_SpaceDown{ false };
     State m_State{ State::MENU };
     uint8_t m_NumPlayers{ 1 };
-    Game m_Game{ 0 };
 };
 
 
