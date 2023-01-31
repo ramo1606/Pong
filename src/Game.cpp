@@ -45,7 +45,7 @@ void Game::update()
 			m_Bats[scoring_player]->addScore();
 
 			//Play Sound
-			playSound(EPONG_SOUNDS::SCORE_GOAL);
+			playSound(std::string("score_goal"), 1);
 
 			m_Bats[losing_player]->setTimer(20);
 		}
@@ -59,14 +59,14 @@ void Game::update()
 
 void Game::draw()
 {
-	DrawTexture(*ResourceManager::getSprite(EPONG_SPRITES::TABLE), 0, 0, WHITE);
+	DrawTexture(*ResourceManager::getSprite(std::string("table")), 0, 0, WHITE);
 
 	for (auto& bat : m_Bats) 
 	{
 		if (bat->getTimer() > 0 && m_Ball.out()) 
 		{
-			EPONG_SPRITES effect = bat->getPlayer() == Player::Player1 ? EPONG_SPRITES::EFFECT_0 : EPONG_SPRITES::EFFECT_1;
-			DrawTexture(*ResourceManager::getSprite(effect), 0, 0, WHITE);
+			std::string effect = bat->getPlayer() == Player::Player1 ? "0" : "1";
+			DrawTexture(*ResourceManager::getSprite(std::string("effect") + effect), 0, 0, WHITE);
 		}
 	}
 
@@ -96,26 +96,33 @@ void Game::reset(int players)
 	createPlayers(players);
 }
 
-void Game::playSound(EPONG_SOUNDS sound, bool isMenu)
+void Game::playSound(std::string& sound, int count, bool isMenu)
 {
 	if (!m_Bats[0]->isAI() || isMenu) 
 	{
-		PlaySound(*ResourceManager::getSound(sound));
+		PlaySound(*ResourceManager::getSound(sound + std::to_string(GetRandomValue(0, count - 1))));
 	}
 }
 
 void Game::printScores()
 {
-	EPONG_SPRITES player1ScoreDigit0 = m_Bats[1]->getTimer() > 0 && m_Ball.out() ? m_Player1Num[m_Bats[0]->getScore() / 10] : m_GreyNum[m_Bats[0]->getScore() / 10];
-	EPONG_SPRITES player1ScoreDigit1 = m_Bats[1]->getTimer() > 0 && m_Ball.out() ? m_Player1Num[m_Bats[0]->getScore() % 10] : m_GreyNum[m_Bats[0]->getScore() % 10];
-	
-	EPONG_SPRITES player2ScoreDigit0 = m_Bats[0]->getTimer() > 0 && m_Ball.out() ? m_Player2Num[m_Bats[1]->getScore() / 10] : m_GreyNum[m_Bats[1]->getScore() / 10];
-	EPONG_SPRITES player2ScoreDigit1 = m_Bats[0]->getTimer() > 0 && m_Ball.out() ? m_Player2Num[m_Bats[1]->getScore() % 10] : m_GreyNum[m_Bats[1]->getScore() % 10];
-	
-	DrawTexture(*ResourceManager::getSprite(player1ScoreDigit0), 255, 46, WHITE);
-	DrawTexture(*ResourceManager::getSprite(player1ScoreDigit1), 310, 46, WHITE);
-	DrawTexture(*ResourceManager::getSprite(player2ScoreDigit0), 415, 46, WHITE);
-	DrawTexture(*ResourceManager::getSprite(player2ScoreDigit1), 470, 46, WHITE);
+	for (int player = 0; player <= 1; ++player)
+	{
+		std::string score = std::to_string(m_Bats[player]->getScore() / 10) + std::to_string(m_Bats[player]->getScore() % 10);
+
+		for (int i = 0; i <= 1; ++i)
+		{
+			std::string color = "0";
+			int otherPlayer = 1 - player;
+			if (m_Bats[otherPlayer]->getTimer() > 0 && m_Ball.out()) 
+			{
+				color = player == 0 ? "2" : "1";
+			}
+			std::string image = "digit";
+			image += color + score[i];
+			DrawTexture(*ResourceManager::getSprite(image), 255 + (160 * player) + (i * 55), 46, WHITE);
+		}
+	}
 }
 
 Ball& Game::getBall()

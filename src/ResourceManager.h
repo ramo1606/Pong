@@ -14,14 +14,14 @@ public:
 	~ResourceManager();
 
 	bool loadResources();
-	static Texture2D* getSprite(EPONG_SPRITES obj);
-	static Sound* getSound(EPONG_SOUNDS obj);
-	static Music* getMusic(EPONG_MUSIC obj);
+	static Texture2D* getSprite(std::string& obj);
+	static Sound* getSound(std::string& obj);
+	static Music* getMusic(std::string& obj);
 	void cleanup();
 
 private:
 	static ResourceManager* m_Instance;
-	std::map<EPONG_SPRITES, Texture2D> m_SpritesMap;
-	std::map<EPONG_SOUNDS, Sound> m_SoundsMap;
-	std::map<EPONG_MUSIC, Music> m_MusicMap;
+	std::map<std::string, Texture2D> m_SpritesMap;
+	std::map<std::string, Sound> m_SoundsMap;
+	std::map<std::string, Music> m_MusicMap;
 };

@@ -15,5 +15,4 @@ public:
 
 private:
 	int m_Time{ 0 };
-	std::vector<Texture2D*> m_Animations;
 };

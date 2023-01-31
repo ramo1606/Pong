@@ -72,26 +72,11 @@ float Bat::ai()
 
 void Bat::selectBatImage()
 {
-	EPONG_SPRITES bat_sprite = EPONG_SPRITES::BAT_1;
-	switch (m_Player)
+	int frame = 0;
+	if (m_Timer > 0) 
 	{
-	case Player::Player1:
-		bat_sprite = EPONG_SPRITES::BAT_1;
-		if (m_Timer > 0) 
-		{
-			bat_sprite = m_Game->getBall().out() ? EPONG_SPRITES::BAT_1_SHADOW : EPONG_SPRITES::BAT_1_LIGHT;
-		}
-		break;
-	case Player::Player2:
-		bat_sprite = EPONG_SPRITES::BAT_2;
-		if (m_Timer > 0) 
-		{
-			bat_sprite = m_Game->getBall().out() ? EPONG_SPRITES::BAT_2_SHADOW : EPONG_SPRITES::BAT_2_LIGHT;
-		}
-		break;
-	default:
-		break;
+		frame = m_Game->getBall().out() ? 2 : 1;
 	}
 
-	m_Image = ResourceManager::getSprite(bat_sprite);
+	m_Image = ResourceManager::getSprite(std::string("bat") + std::to_string(static_cast<int>(m_Player)) + std::to_string(frame));
 }

@@ -47,13 +47,13 @@ public:
                 if (m_NumPlayers == 1 && (IsKeyDown(KEY_DOWN) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) == 1))
                 {
                     //Play sound
-                    m_Game.playSound(EPONG_SOUNDS::DOWN, true);
+                    m_Game.playSound(std::string("down"), 1, true);
                     m_NumPlayers = 2;
                 }
                 else if (m_NumPlayers == 2 && (IsKeyDown(KEY_UP) || GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) == -1))
                 {
                     //Play sound
-                    m_Game.playSound(EPONG_SOUNDS::UP, true);
+                    m_Game.playSound(std::string("up"), 1, true);
                     m_NumPlayers = 1;
                 }
                 m_Game.update();
@@ -97,15 +97,15 @@ public:
         {
         case State::MENU:
             if (m_NumPlayers == 1 || m_NumPlayers == 0)
-                DrawTexture(*ResourceManager::getSprite(EPONG_SPRITES::MENU_0), 0, 0, WHITE);
+                DrawTexture(*ResourceManager::getSprite(std::string("menu0")), 0, 0, WHITE);
             if (m_NumPlayers == 2)
-                DrawTexture(*ResourceManager::getSprite(EPONG_SPRITES::MENU_1), 0, 0, WHITE);
+                DrawTexture(*ResourceManager::getSprite(std::string("menu1")), 0, 0, WHITE);
             break;
         //case State::PLAY:
         //    m_Game.draw();
         //    break;
         case State::GAME_OVER:
-            DrawTexture(*ResourceManager::getSprite(EPONG_SPRITES::GAME_OVER), 0, 0, WHITE);
+            DrawTexture(*ResourceManager::getSprite(std::string("over")), 0, 0, WHITE);
             break;
         default:
             break;
@@ -132,12 +132,12 @@ int main(void)
 
     Pong pong;
 
-    PlayMusicStream(*ResourceManager::getMusic(EPONG_MUSIC::THEME));
-    SetMusicVolume(*ResourceManager::getMusic(EPONG_MUSIC::THEME), 0.5f);
+    PlayMusicStream(*ResourceManager::getMusic(std::string("theme")));
+    SetMusicVolume(*ResourceManager::getMusic(std::string("theme")), 0.5f);
 
     while (!WindowShouldClose())
     {
-        UpdateMusicStream(*ResourceManager::getMusic(EPONG_MUSIC::THEME));
+        UpdateMusicStream(*ResourceManager::getMusic(std::string("theme")));
         pong.update();
         pong.draw();
     }

@@ -8,7 +8,7 @@
 
 Ball::Ball(Game& game, float dx) : Actor("Ball", {0, 0}, nullptr), m_Game(&game)
 {
-	m_Image = ResourceManager::getSprite(EPONG_SPRITES::BALL);
+	m_Image = ResourceManager::getSprite(std::string("ball"));
 
 	m_Dx = dx;
 	m_Dy = 0.f;
@@ -66,23 +66,22 @@ void Ball::update()
 				bat->setTimer(10);
 
 				//Play Sounds
-				int soundIndex = GetRandomValue(0, 4);
-				m_Game->playSound(m_HitSounds[soundIndex]);
+				m_Game->playSound(std::string("hit"), 5);
 				if (m_Speed <= 10)
 				{
-					m_Game->playSound(EPONG_SOUNDS::HIT_SLOW);
+					m_Game->playSound(std::string("hit_slow"));
 				}
 				else if (m_Speed <= 12) 
 				{
-					m_Game->playSound(EPONG_SOUNDS::HIT_MEDIUM);
+					m_Game->playSound(std::string("hit_medium"));
 				}
 				else if (m_Speed <= 16) 
 				{
-					m_Game->playSound(EPONG_SOUNDS::HIT_FAST);
+					m_Game->playSound(std::string("hit_fast"));
 				}
 				else 
 				{
-					m_Game->playSound(EPONG_SOUNDS::HIT_VERY_FAST);
+					m_Game->playSound(std::string("hit_veryfast"));
 				}
 			}
 		}
@@ -95,9 +94,8 @@ void Ball::update()
 			m_Game->getImpacts().push_back(std::make_unique<Impact>(m_Pos));
 
 			//Play Sounds
-			int soundIndex = GetRandomValue(0, 4);
-			m_Game->playSound(m_BounceSounds[soundIndex]);
-			m_Game->playSound(EPONG_SOUNDS::BOUNCE_SYNTH);
+			m_Game->playSound(std::string("bounce"), 5);
+			m_Game->playSound(std::string("bounce_synth"));
 		}
 	}
 }
