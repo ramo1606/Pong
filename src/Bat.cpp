@@ -1,15 +1,15 @@
 #include "Bat.h"
 #include "Common.h"
 #include "ResourceManager.h"
+#include "Ball.h"
 #include "Game.h"
 
 #include <algorithm>
 
 using namespace Common;
 
-Bat::Bat(Game& game, Player player, bool isAI)
+Bat::Bat(Player player, bool isAI)
 	: Actor("Bat", { 0, 0 }, nullptr),
-	  m_Game(&game),
 	  m_Player(player),
 	  m_IsAI(isAI)
 {
@@ -56,11 +56,11 @@ void Bat::update()
 	selectBatImage();
 }
 
-float Bat::ai()
+float Bat::ai() const
 {
-	float x_distance = std::abs(m_Game->getBall().getPosition().x - m_Pos.x);
+	float x_distance = std::abs(Game::getInstance()->getBall().getPosition().x - m_Pos.x);
 	float target_y_1 = HALF_HEIGHT;
-	float target_y_2 = m_Game->getBall().getPosition().y + m_Game->getAIOffset();
+	float target_y_2 = Game::getInstance()->getBall().getPosition().y + Game::getInstance()->getAIOffset();
 
 	float weight1 = std::min(1.f, x_distance / HALF_WIDTH);
 	float weight2 = 1.f - weight1;
@@ -75,7 +75,7 @@ void Bat::selectBatImage()
 	int frame = 0;
 	if (m_Timer > 0) 
 	{
-		frame = m_Game->getBall().out() ? 2 : 1;
+		frame = Game::getInstance()->getBall().out() ? 2 : 1;
 	}
 
 	m_Image = ResourceManager::getSprite(std::string("bat") + std::to_string(static_cast<int>(m_Player)) + std::to_string(frame));

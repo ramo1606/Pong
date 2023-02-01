@@ -4,6 +4,7 @@
 
 #include "Impact.h"
 #include "Bat.h"
+#include "rmem.h"
 #include "Ball.h"
 
 class Game 
@@ -23,10 +24,10 @@ public:
 	void printScores();
 
 	Ball& getBall();
-	std::vector<std::unique_ptr<Bat>>& getBats();
-	std::vector<std::unique_ptr<Impact>>& getImpacts();
+	Bat& getBat(Player player) const ;
+	void addImpact(Vector2 pos);
 
-	float getAIOffset() { return m_AI_Offset; }
+	float getAIOffset() const { return m_AI_Offset; }
 	void setAIOffset(float value) { m_AI_Offset = value; }
 
 private:
@@ -34,9 +35,13 @@ private:
 	static std::shared_ptr<Game> m_Instance;
 
 	void createPlayers(int players);
-	std::vector<std::unique_ptr<Impact>> m_Impacts;
-	std::vector<std::unique_ptr<Bat>> m_Bats;
 
-	Ball m_Ball{ *this, -1.f };
+	std::vector<Impact*> m_Impacts;
+	std::vector<Bat*> m_Bats;
+
+	ObjPool m_BatsPool = CreateObjPool(sizeof(Bat), 2);
+	ObjPool m_ImpactsPool = CreateObjPool(sizeof(Impact), 10);
+
+	Ball m_Ball { -1 };
 	float m_AI_Offset{ 0.f };
 };

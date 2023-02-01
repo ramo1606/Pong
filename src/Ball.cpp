@@ -1,12 +1,16 @@
+#define RMEM_IMPLEMENTATION
 #include "Ball.h"
 #include "Bat.h"
 #include "Game.h"
 #include "ResourceManager.h"
 #include "raymath.h"
+#include "Common.h"
 
 #include <algorithm>
 
-Ball::Ball(Game& game, float dx) : Actor("Ball", {0, 0}, nullptr), m_Game(&game)
+using namespace Common;
+
+Ball::Ball(float dx) : Actor("Ball", {0, 0}, nullptr)
 {
 	m_Image = ResourceManager::getSprite(std::string("ball"));
 
@@ -21,6 +25,8 @@ Ball::Ball(Game& game, float dx) : Actor("Ball", {0, 0}, nullptr), m_Game(&game)
 
 void Ball::update()
 {
+	std::shared_ptr<Game> gameInstance = Game::getInstance();
+
 	for (int i = 0; i < m_Speed; ++i) 
 	{
 		float original_x = m_Pos.x;
@@ -35,12 +41,12 @@ void Ball::update()
 			if (m_Pos.x < HALF_WIDTH) 
 			{
 				new_dir_x = 1;
-				bat = m_Game->getBats()[0].get();
+				bat = &gameInstance->getBat(Player::Player1);
 			}
 			else 
 			{
 				new_dir_x = -1;
-				bat = m_Game->getBats()[1].get();
+				bat = &gameInstance->getBat(Player::Player2);
 			}
 
 			float difference_y = m_Pos.y - bat->getPosition().y;
@@ -58,30 +64,30 @@ void Ball::update()
 				m_Dy = normalized_velocity.y;
 
 				Vector2 pos = { m_Pos.x - new_dir_x * 10.f, m_Pos.y };
-				m_Game->getImpacts().push_back(std::make_unique<Impact>(pos));
+				gameInstance->addImpact(pos);
 
 				m_Speed += 1;
 
-				m_Game->setAIOffset(GetRandomValue(-10, 10));
+				gameInstance->setAIOffset(GetRandomValue(-10, 10));
 				bat->setTimer(10);
 
 				//Play Sounds
-				m_Game->playSound(std::string("hit"), 5);
+				gameInstance->playSound(std::string("hit"), 5);
 				if (m_Speed <= 10)
 				{
-					m_Game->playSound(std::string("hit_slow"));
+					gameInstance->playSound(std::string("hit_slow"));
 				}
 				else if (m_Speed <= 12) 
 				{
-					m_Game->playSound(std::string("hit_medium"));
+					gameInstance->playSound(std::string("hit_medium"));
 				}
 				else if (m_Speed <= 16) 
 				{
-					m_Game->playSound(std::string("hit_fast"));
+					gameInstance->playSound(std::string("hit_fast"));
 				}
 				else 
 				{
-					m_Game->playSound(std::string("hit_veryfast"));
+					Game::getInstance()->playSound(std::string("hit_veryfast"));
 				}
 			}
 		}
@@ -91,18 +97,20 @@ void Ball::update()
 			m_Dy = -m_Dy;
 			m_Pos.y = m_Pos.y;
 
-			m_Game->getImpacts().push_back(std::make_unique<Impact>(m_Pos));
+			gameInstance->addImpact(m_Pos);
 
 			//Play Sounds
-			m_Game->playSound(std::string("bounce"), 5);
-			m_Game->playSound(std::string("bounce_synth"));
+			gameInstance->playSound(std::string("bounce"), 5);
+			gameInstance->playSound(std::string("bounce_synth"));
 		}
 	}
 }
 
-void Ball::reset(int direction)
+void Ball::reset(float dx)
 {
-	m_Dx = direction;
+	m_Image = ResourceManager::getSprite(std::string("ball"));
+
+	m_Dx = dx;
 	m_Dy = 0.f;
 
 	m_Pos.x = HALF_WIDTH;
@@ -111,7 +119,7 @@ void Ball::reset(int direction)
 	m_Speed = 5;
 }
 
-bool Ball::out()
+bool Ball::out() const
 {
 	return m_Pos.x < 0.f || m_Pos.x > WIDTH;
 }

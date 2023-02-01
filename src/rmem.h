@@ -56,6 +56,7 @@
 
 #ifndef RMEM_H
 #define RMEM_H
+#pragma once
 
 #include <inttypes.h>
 #include <stdbool.h>
@@ -384,7 +385,7 @@ MemPool CreateMemPool(const size_t size)
     else
     {
         // Align the mempool size to at least the size of an alloc node.
-        uint8_t *const restrict buf = malloc(size*sizeof *buf);
+        uint8_t *const restrict buf = (uint8_t* const restrict)malloc(size*sizeof *buf);
 
         if (buf==NULL) return mempool;
         else
@@ -420,7 +421,7 @@ void DestroyMemPool(MemPool *const restrict mempool)
     {
         void *const restrict ptr = (void *)mempool->arena.mem;
         free(ptr);
-        *mempool = (MemPool){ 0 };
+        *mempool = MemPool{ 0 };
     }
 }
 
@@ -486,7 +487,7 @@ void *MemPoolRealloc(MemPool *const restrict mempool, void *const ptr, const siz
     {
         MemNode *const node = (MemNode *)((uint8_t *)ptr - sizeof *node);
         const size_t NODE_SIZE = sizeof *node;
-        uint8_t *const resized_block = MemPoolAlloc(mempool, size);
+        uint8_t *const resized_block = (uint8_t* const)MemPoolAlloc(mempool, size);
 
         if (resized_block == NULL) return NULL;
         else
@@ -578,7 +579,7 @@ ObjPool CreateObjPool(const size_t objsize, const size_t len)
     else
     {
         const size_t aligned_size = __AlignSize(objsize, sizeof(size_t));
-        uint8_t *const restrict buf = calloc(len, aligned_size);
+        uint8_t *const restrict buf = (uint8_t* const restrict)calloc(len, aligned_size);
 
         if (buf == NULL) return objpool;
         objpool.objSize = aligned_size;
@@ -629,7 +630,7 @@ void DestroyObjPool(ObjPool *const restrict objpool)
         void *const restrict ptr = (void *)objpool->mem;
         free(ptr);
 
-        *objpool = (ObjPool){ 0 };
+        *objpool = ObjPool{ 0 };
     }
 }
 
@@ -690,7 +691,7 @@ BiStack CreateBiStack(const size_t len)
 
     if (len == 0) return destack;
 
-    uint8_t *const buf = malloc(len*sizeof *buf);
+    uint8_t *const buf = (uint8_t* const)malloc(len*sizeof *buf);
     if (buf == NULL) return destack;
     destack.size = len;
     destack.mem = (uintptr_t)buf;
@@ -722,7 +723,7 @@ void DestroyBiStack(BiStack *const restrict destack)
     {
         uint8_t *const restrict buf = (uint8_t *)destack->mem;
         free(buf);
-        *destack = (BiStack){ 0 };
+        *destack = BiStack{ 0 };
     }
 }
 

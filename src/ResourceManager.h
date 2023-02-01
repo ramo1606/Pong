@@ -14,10 +14,11 @@ public:
 	~ResourceManager();
 
 	bool loadResources();
+	void cleanup();
+	
 	static Texture2D* getSprite(std::string& obj);
 	static Sound* getSound(std::string& obj);
 	static Music* getMusic(std::string& obj);
-	void cleanup();
 
 private:
 	static ResourceManager* m_Instance;

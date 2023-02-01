@@ -1,5 +1,4 @@
 #include "raylib.h"
-#include "Actor.h"
 #include "Common.h"
 #include "ResourceManager.h"
 #include "Game.h"
@@ -61,7 +60,7 @@ public:
             break;
         case State::PLAY:
             //Has anyone won?
-            if (std::max(Game::getInstance()->getBats()[0]->getScore(), Game::getInstance()->getBats()[1]->getScore()) > 9)
+            if (std::max(Game::getInstance()->getBat(Player::Player1).getScore(), Game::getInstance()->getBat(Player::Player2).getScore()) > 9)
             {
                 m_State = State::GAME_OVER;
             }

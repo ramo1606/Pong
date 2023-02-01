@@ -6,17 +6,17 @@ project(Pong
 )
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD_REQUIRED OFF)
 
-#if (MSVC)
-#  set(CMAKE_CXX_FLAGS "/EHsc /std:c++17")
-#  set(CMAKE_CXX_FLAGS_DEBUG "/Od")
-#  set(CMAKE_CXX_FLAGS_RELEASE "/O2")
-#else ()
-#  set(CMAKE_CXX_FLAGS "-std=c++17")
-#  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
-#  set(CMAKE_CXX_FLAGS_RELEASE "-O2")
-#endif ()
+if (MSVC)
+  set(CMAKE_CXX_FLAGS "/EHsc /std:c++17")
+  set(CMAKE_CXX_FLAGS_DEBUG "/Od")
+  set(CMAKE_CXX_FLAGS_RELEASE "/O2")
+else ()
+  set(CMAKE_CXX_FLAGS "-std=c++17")
+  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+endif ()
 
 # Adding Raylib
 include(FetchContent)

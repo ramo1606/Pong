@@ -25,7 +25,7 @@ void Actor::draw()
 	DrawTexture(*m_Image, m_Pos.x - m_Image->width/2, m_Pos.y - m_Image->height / 2, WHITE);
 }
 
-Vector2 Actor::getPosition()
+Vector2 Actor::getPosition() const
 {
 	return m_Pos;
 }
