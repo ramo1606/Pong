@@ -5,10 +5,6 @@
 
 using namespace Common;
 
-//TODO: make resourcesmanager and game a real singleton
-//TODO: get rid of magic numbers
-//TODO: comment code
-
 enum class State : uint8_t 
 {
     MENU,
@@ -16,6 +12,9 @@ enum class State : uint8_t
     GAME_OVER
 };
 
+/*
+* Pong class will manage the game states 
+*/
 class Pong 
 {
 public:
@@ -60,7 +59,7 @@ public:
             break;
         case State::PLAY:
             //Has anyone won?
-            if (std::max(Game::getInstance()->getBat(Player::Player1).getScore(), Game::getInstance()->getBat(Player::Player2).getScore()) > 9)
+            if (std::max(Game::getInstance()->getBat(Player::Player1)->getScore(), Game::getInstance()->getBat(Player::Player2)->getScore()) > 9)
             {
                 m_State = State::GAME_OVER;
             }
@@ -100,9 +99,6 @@ public:
             if (m_NumPlayers == 2)
                 DrawTexture(*ResourceManager::getSprite(std::string("menu1")), 0, 0, WHITE);
             break;
-        //case State::PLAY:
-        //    m_Game.draw();
-        //    break;
         case State::GAME_OVER:
             DrawTexture(*ResourceManager::getSprite(std::string("over")), 0, 0, WHITE);
             break;
@@ -121,18 +117,21 @@ private:
 
 int main(void)
 {
+    // Init Raylib
     InitWindow(WIDTH, HEIGHT, TITLE.c_str());
     InitAudioDevice();
     SetTargetFPS(60);
 
-    ResourceManager resourceManager;
-    resourceManager.loadResources();
+    // Load Resources
+    ResourceManager::getInstance()->loadResources();
 
     Pong pong;
 
+    // Play music
     PlayMusicStream(*ResourceManager::getMusic(std::string("theme")));
     SetMusicVolume(*ResourceManager::getMusic(std::string("theme")), 0.5f);
 
+    // Main Loop
     while (!WindowShouldClose())
     {
         UpdateMusicStream(*ResourceManager::getMusic(std::string("theme")));
@@ -140,6 +139,8 @@ int main(void)
         pong.draw();
     }
 
+    //CleanUp and ShutDown
+    ResourceManager::getInstance()->cleanup();
     CloseAudioDevice();
     CloseWindow();
 

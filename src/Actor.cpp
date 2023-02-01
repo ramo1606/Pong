@@ -22,6 +22,7 @@ void Actor::update()
 
 void Actor::draw()
 {
+	//Call Raylib function to print this image.
 	DrawTexture(*m_Image, m_Pos.x - m_Image->width/2, m_Pos.y - m_Image->height / 2, WHITE);
 }
 

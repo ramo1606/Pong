@@ -1,21 +1,26 @@
 #include "ResourceManager.h"
 #include "Utilities.h"
 
-ResourceManager* ResourceManager::m_Instance = nullptr;
+std::shared_ptr<ResourceManager> ResourceManager::m_Instance = nullptr;
 
 ResourceManager::ResourceManager()
 {
-	if(!m_Instance)
-		m_Instance = this;
 }
 
 ResourceManager::~ResourceManager()
 {
 }
 
+std::shared_ptr<ResourceManager> ResourceManager::getInstance()
+{
+	if (!m_Instance)
+		m_Instance.reset(new ResourceManager());
+	return m_Instance;
+}
+
 bool ResourceManager::loadResources()
 {
-	//Load sprites
+	//Load sprites in images folder and 
 	std::string images_folder = ASSETS_PATH"images/";
 	auto images = Utils::GetFileList(images_folder);
 	for (const auto& image : images)
@@ -47,6 +52,7 @@ bool ResourceManager::loadResources()
 
 Texture2D* ResourceManager::getSprite(std::string& obj)
 {
+	//Search the image in the map and return it, return nullptr if image does not exists
 	auto& spritesMap = m_Instance->m_SpritesMap;
 	auto it = spritesMap.find(obj);
 	if (it == spritesMap.end()) {
@@ -57,6 +63,7 @@ Texture2D* ResourceManager::getSprite(std::string& obj)
 
 Sound* ResourceManager::getSound(std::string& obj)
 {
+	//Search the sound in the map and return it, return nullptr if image does not exists
 	auto& soundsMap = m_Instance->m_SoundsMap;
 	auto it = soundsMap.find(obj);
 	if (it == soundsMap.end()) {
@@ -67,6 +74,7 @@ Sound* ResourceManager::getSound(std::string& obj)
 
 Music* ResourceManager::getMusic(std::string& obj)
 {
+	//Search the music in the map and return it, return nullptr if image does not exists
 	auto& musciMap = m_Instance->m_MusicMap;
 	auto it = musciMap.find(obj);
 	if (it == musciMap.end()) {
@@ -77,6 +85,7 @@ Music* ResourceManager::getMusic(std::string& obj)
 
 void ResourceManager::cleanup()
 {
+	//Unload resources and clear maps.
 	auto& spritesMap = m_Instance->m_SpritesMap;
 	for (auto& sprite : spritesMap) 
 	{

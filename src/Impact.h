@@ -3,6 +3,9 @@
 
 #include "Actor.h"
 
+/*
+*  Class for an animation which is displayed briefly whenever the ball bounces
+*/
 class Impact : public Actor 
 {
 public:

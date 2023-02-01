@@ -14,6 +14,8 @@ namespace Common
     constexpr float PLAYER_SPEED = 6;
     constexpr float MAX_AI_SPEED = 6;
 
+    constexpr float BALL_SPEED = 5;
+
     constexpr int PLAYER1_INITIAL_X_POS = 40;
     constexpr int PLAYER2_INITIAL_X_POS = 760;
     constexpr int PLAYER_INITIAL_Y_POS = HALF_HEIGHT;

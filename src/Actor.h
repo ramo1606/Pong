@@ -2,6 +2,10 @@
 #include <string>
 #include <raylib.h>
 
+/*
+* Base Actor class, all the elements in the game will derive from this class.
+* It contains the position and a pointer to a image that will draw every frame.
+*/
 class Actor 
 {
 public:
@@ -10,15 +14,11 @@ public:
 	Actor& operator=(const Actor&) = default;
 	~Actor() = default;
 
-	//
 	virtual void update();
 	virtual void draw();
-	
-	//
 	virtual void processInput();
-	virtual void setImage(Texture2D& image);
-
-	//
+	
+	void setImage(Texture2D& image);
 	Vector2 getPosition() const;
 
 protected:

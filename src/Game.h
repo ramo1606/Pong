@@ -4,9 +4,13 @@
 
 #include "Impact.h"
 #include "Bat.h"
-#include "rmem.h"
 #include "Ball.h"
 
+#include "rmem.h"
+
+/*
+* Main class for the game logic, it creates and manages all the actors needed in the scene.
+*/
 class Game 
 {
 public:
@@ -23,8 +27,8 @@ public:
 	void playSound(std::string& sound, int count = 1, bool isMenu = false);
 	void printScores();
 
-	Ball& getBall();
-	Bat& getBat(Player player) const ;
+	Ball* getBall();
+	Bat* getBat(Player player) const ;
 	void addImpact(Vector2 pos);
 
 	float getAIOffset() const { return m_AI_Offset; }
@@ -39,6 +43,7 @@ private:
 	std::vector<Impact*> m_Impacts;
 	std::vector<Bat*> m_Bats;
 
+	// We use the rmem library to use ObjPool class to keep memory allocation at minimum
 	ObjPool m_BatsPool = CreateObjPool(sizeof(Bat), 2);
 	ObjPool m_ImpactsPool = CreateObjPool(sizeof(Impact), 10);
 

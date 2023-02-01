@@ -1,6 +1,10 @@
 #pragma once
 #include "Actor.h"
 
+/*
+* Ball Actor is the ball that will move around the screen and players have to hit
+* It contains speed and direction of the ball
+*/
 class Ball : public Actor 
 {
 public:
@@ -12,11 +16,10 @@ public:
 	void update() override;
 	void reset(float dx);
 
+	//Check if the ball is out of the field boundary
 	bool out() const;
 
 private:
-	float m_Dx{ 0.f };
-	float m_Dy{ 0.f };
-
 	int m_Speed{ 0 };
+	Vector2 m_Direction{ 0.f, 0.f };
 };
